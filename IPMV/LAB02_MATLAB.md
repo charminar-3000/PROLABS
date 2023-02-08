@@ -4,7 +4,8 @@ close all;
 clear all;
 clc;
 
-A = imread("image2.jpg");
+I1 = imread("image2.jpg");
+A = rgb2gray(I1);
 [r,c]=size(A);
 B = 255-A;
 
@@ -22,7 +23,7 @@ end
 M=imadjust(A,stretchlim(B),[]);
 
 figure(1);
-subplot(2,2,1), imshow(A), title("Original Image");
+subplot(2,2,1), imshow(I1), title("Original Image");
 subplot(2,2,2), imshow(B), title("Negative Image");
 subplot(2,2,3), imshow(C), title("Threshold Image");
 subplot(2,2,4), imshow(M), title("Contrast Stretching");
@@ -56,7 +57,7 @@ y = sgtitle("Name")
 end
 
 %log and power transformartion
-F = im2double(A);
+F = im2double(I1);
 factor = input("Enter the value of c: ");
 gamma = input("Enter the value of Gamma: ");
 x = F;
@@ -69,9 +70,8 @@ y(i,j)=factor*(F(i,j))^gamma;
 end
 
 figure(4);
-subplot(2,2,1), imshow(A), title("Original Image");
+subplot(2,2,1), imshow(I1), title("Original Image");
 subplot(2,2,2), imshow(x), title("Log Transformation");
 subplot(2,2,3), imshow(y), title("Power Transformation");
 y = sgtitle("Name")
-
 ```
