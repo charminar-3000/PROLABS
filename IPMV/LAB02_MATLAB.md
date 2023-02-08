@@ -1,42 +1,77 @@
-# Code
+# MATLAB Code
 ```
-clc;
 close all;
 clear all;
+clc;
+
+A = imread("image2.jpg");
+[r,c]=size(A);
+B = 255-A;
+
+th = input("Enter threshold value: ");
+for i=1:r
+    for j=1:c
+        if (A(i,j) > th)
+            C(i,j)=255;
+        else C(i,j)=0;
+        end
+    end
+end
+
+%contrast stretching
+M=imadjust(A,stretchlim(B),[]);
+
 figure(1);
-I1 = imread('test1.jfif');
-imshow(I1);
-pause
-I1g = rgb2gray(I1);
-figure;
-imshow(I1g);
-pause
-I1gn = 255 -I1g;
-figure;
-imshow(I1gn);
-pause
-c=3;
-I1g2 = im2double(I1g);
-I2t = c*log10(1+ I1g2);
-figure;
-imshow(I2t);
-pause
-% thresholding logic
-threshold = 120;
-Ithres = I1g;
-Ithres(Ithres <= threshold) = 0;
-Ithres(Ithres > threshold) = 255;
-figure;
-imshow(Ithres);
-% bitscaling
-A=I1g;
-B=bitget(A,1); subplot(3,3,1), imshow(logical(B));title('Bit plane 1');
-B=bitget(A,2); subplot(3,3,2), imshow(logical(B));title('Bit plane 2');
-B=bitget(A,3); subplot(3,3,3), imshow(logical(B));title('Bit plane 3');
-B=bitget(A,4); subplot(3,3,4), imshow(logical(B));title('Bit plane 4');
-B=bitget(A,5); subplot(3,3,5), imshow(logical(B));title('Bit plane 5');
-B=bitget(A,6); subplot(3,3,6), imshow(logical(B));title('Bit plane 6');
-B=bitget(A,7); subplot(3,3,7), imshow(logical(B));title('Bit plane 7');
-B=bitget(A,8); subplot(3,3,8), imshow(logical(B));title('Bit plane 8');
+subplot(2,2,1), imshow(A), title("Original Image");
+subplot(2,2,2), imshow(B), title("Negative Image");
+subplot(2,2,3), imshow(C), title("Threshold Image");
+subplot(2,2,4), imshow(M), title("Contrast Stretching");
+
+y = sgtitle("Name")
+
+%bit plane slicing
+n1=0;
+for z=1:8
+n1=n1+1;
+s=255-(2^(n1-1));
+s1=2^(n1-1);
+for i=1:r
+ for j=1:c
+D(i,j)=bitand(A(i,j),s);
+E(i,j)=bitand(A(i,j),s1);
+end
+end
+figure(2);
+subplot(4,3,z);
+imshow(D);
+title("BIT PLANE REMOVED");
+y = sgtitle("Name")
+
+figure(3);
+subplot(4,3,z);
+imshow(E);
+title("BIT PLANE SLICING");
+y = sgtitle("Name")
+
+end
+
+%log and power transformartion
+F = im2double(A);
+factor = input("Enter the value of c: ");
+gamma = input("Enter the value of Gamma: ");
+x = F;
+y = F;
+for i=1:r
+    for j=1:c
+x(i,j)=factor*log(1+F(i,j));
+y(i,j)=factor*(F(i,j))^gamma;
+    end
+end
+
+figure(4);
+subplot(2,2,1), imshow(A), title("Original Image");
+subplot(2,2,2), imshow(x), title("Log Transformation");
+subplot(2,2,3), imshow(y), title("Power Transformation");
+y = sgtitle("Name")
 
 ```
